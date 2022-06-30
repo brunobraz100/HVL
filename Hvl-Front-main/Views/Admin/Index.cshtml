@@ -1,0 +1,120 @@
+@model IEnumerable<AdminLoginViewModel>
+
+@{
+    ViewData["Title"] = "Admminstradores";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<div class="card mb-4">
+    <br />
+    <div class="card-header">
+        <i class="fa-solid fa-user"></i>
+        Administradores
+        <a  class="btn btn-primary btn-floating" href="@Url.Action("Add", "Admin", new {IdCliente = ViewBag.IdCliente})">
+        <i class="fa-solid fa-user"></i>
+            Novo Administrador
+        </a>
+    </div>
+    <div class="card-body table-responsive">
+        <table id="dataTable" class="table">
+            <thead>
+                <tr>
+                    <td>CNPJ</td>
+                    <td>Ações</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AdminLoginViewModel adm in Model)
+                {
+                    <tr>
+                        <td>@adm.nmCpf</td>
+                        <td>
+                            <button onclick="excluir('@adm.nmCpf')" class="btn btn-danger" data-toggle="tooltip" title="Excluir">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#dataTable').DataTable({
+                "language": {
+                    "lengthMenu": "Exibir _MENU_ por página",
+                    "zeroRecords": "Não existem registros",
+                    "info": "página _PAGE_ de _PAGES_",
+                    "paginate": {
+                        "first": "Primeira",
+                        "last": "Última",
+                        "next": "Próxima",
+                        "previous": "Anterior"
+                    },
+                    "search": "Buscar por",
+                    "buttons": {
+                        "pageLength": {
+                            _: "Exibir %d por página",
+                            '-1': "Tout afficher"
+                        }
+                    }
+                },
+                dom: 'Bfrtip',
+            });
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        });
+
+        function excluir(nmCpf)
+        {
+  
+            swal({
+                    title: "Você tem certeza?",
+                    text: "Uma vez que remover, você nunca mais vai ver este registro!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/Admin/DeleteAdministrador?nmCpf=" + nmCpf,
+                        type: "GET",
+                        contentType: "application/json",
+                        success: function(response)
+                        {
+                            let iconType = "success";
+                            if(response.complete == false)
+                            {
+                                iconType = "warning"
+                            }
+                            swal(response.message, {
+                                icon: iconType,
+                            });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3000)
+                        },
+                        erro: function()
+                        {
+                            swal("Algo deu errado!", {
+                                icon: "warning",
+                            });
+                        }
+                    })
+                   
+                } else {
+                    swal("Tudo bem, nada foi feito!");
+                }
+            });
+        }
+    </script>
+}

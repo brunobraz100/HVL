@@ -1,0 +1,23 @@
+
+@{
+    ViewData["Title"] = "Vencimentos";
+}
+@Html.Raw(ViewBag.retorno)
+<div class="card mb-4">
+    <br />
+    <div class="card-header">
+        <i class="fa-solid fa-file-csv"></i>
+        Agendar Vencimentos
+    </div>
+    <div class="card-body">
+        <H5>
+            Lembre-se de enviar um arquivo csv salvo em UTF-8
+        </H5>
+        @using (Html.BeginForm("Add", "AgendaVencimento", FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {   
+            <label>Selecione o arquivo</label>
+            <input type="file" accept=".csv,.xlsx,.xls" name="vencimentos" />
+            <button class="btn btn-success" type="submit">Enviar</button>
+        }
+    </div>
+</div>

@@ -1,0 +1,16 @@
+/Users/kainos/Desktop/publish teste/appsettings.Development.json
+/Users/kainos/Desktop/publish teste/appsettings.json
+/Users/kainos/Desktop/publish teste/hvl.dll
+/Users/kainos/Desktop/publish teste/hvl.deps.json
+/Users/kainos/Desktop/publish teste/hvl.runtimeconfig.json
+/Users/kainos/Desktop/publish teste/hvl.pdb
+/Users/kainos/Desktop/publish teste/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/kainos/Desktop/publish teste/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/kainos/Desktop/publish teste/Microsoft.IdentityModel.Logging.dll
+/Users/kainos/Desktop/publish teste/Microsoft.IdentityModel.Protocols.dll
+/Users/kainos/Desktop/publish teste/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/kainos/Desktop/publish teste/Microsoft.IdentityModel.Tokens.dll
+/Users/kainos/Desktop/publish teste/MySqlConnector.dll
+/Users/kainos/Desktop/publish teste/Newtonsoft.Json.dll
+/Users/kainos/Desktop/publish teste/System.Diagnostics.DiagnosticSource.dll
+/Users/kainos/Desktop/publish teste/System.IdentityModel.Tokens.Jwt.dll

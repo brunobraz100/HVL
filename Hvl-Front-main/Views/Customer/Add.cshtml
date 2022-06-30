@@ -1,0 +1,48 @@
+@model CustomerViewModel
+@{
+    ViewData["Title"] = "Novo Cliente";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        @Html.Raw(ViewBag.retorno)
+        <div class="card mb-4">
+            <div class="card-title">
+                <i class="fa-solid fa-user-plus"></i>
+                Cadastro de novo cliente
+            </div>
+            <div class="card-body">
+                @using(Html.BeginForm())
+                {
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="NmCnpjString" maxlength="14" type="text" placeholder="CNPJ" />
+                        <label for="NmCnpjString">CNPJ</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="DsRasaoSocial" type="text" placeholder="Razão Social" />
+                        <label for="DsRasaoSocial">Razão Social</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="DsEmail" type="text" placeholder="E-mail" />
+                        <label for="DsEmail">E-mail</label>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="@Url.Action("index", "Customer")">Voltar</a>
+                        <button class="btn btn-success" type="submit">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#NmCnpjString").mask("99.999.999/9999-99");
+        })
+    </script>
+}

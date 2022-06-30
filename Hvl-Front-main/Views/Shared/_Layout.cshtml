@@ -1,0 +1,163 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HVL</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="@Url.Action("index", "Home")">
+            <img
+                width="100"
+                class="img-responsive" 
+                src="~/images/hvl-logo.png" alt="hvl-logo" 
+                />
+        </a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <form hidden class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        </form>
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end pull-left" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "Account")">Trocar Senha</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" id="exitButton" href="#!">Sair</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                     <div class="sb-sidenav-menu-heading">
+                        <button type="button" class="btn btn-sm btn-default order-lg-0 me-4 me-lg-0" onclick="bigest()">
+                            <i class="fa-solid fa-arrow-up-wide-short"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default order-lg-0 me-4 me-lg-0" onclick="smallest()">
+                            <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        </button>
+                    </div>
+                    @{
+                        var role = System.Security.Claims.ClaimTypes.Role;
+                    }
+                    @if(User.FindFirst(role).Value == "2" )
+                    {
+                        <div class="sb-sidenav-menu-heading">Documentos</div>
+                        <a class="nav-link" href="@Url.Action("MyDocuments", "Documents")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file"></i></div>
+                            Meus Documentos
+                        </a>
+                    } 
+                    else 
+                    {
+                        <a class="nav-link" href="@Url.Action("Index", "Home")" >
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Home
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Usuários Administradores</div>
+                        <a class="nav-link" href="@Url.Action("Index", "Admin")" >
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                            Administradores
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Clientes</div>
+                        <a class="nav-link" href="@Url.Action("index", "Customer")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Clientes
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Add", "AgendaVencimento")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-csv"></i></div>
+                            Agendar Vencimentos
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Remove", "AgendaVencimento")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-circle-xmark"></i></div>
+                            Remover Vencimentos
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Categorias</div>
+                        <a class="nav-link" href="@Url.Action("index", "Category")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-network-wired"></i></div>
+                            Categorias
+                        </a>
+                    } 
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                @RenderBody()
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container">
+                        &copy; @DateTime.UtcNow.ToString("yyyy") - HVL
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" tabindex="-1" id="exitModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Atenção</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você deseja mesmo sair?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <a href="@Url.Action("LogOut", "Account")" class="btn btn-primary">Sair</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
+    
+    <script type="text/javascript">
+        
+        $(document).ready(function(){
+
+            $("#exitButton").click(function(){
+                $("#exitModal").modal("show");
+            })
+        })
+
+
+        let fontsize = 20
+
+        function bigest()
+        {
+            fontsize++;
+            let content = $(".container-fluid").css({ 'font-size': fontsize })
+        }
+
+        function smallest()
+        {
+            fontsize--;
+            let content = $(".container-fluid").css({ 'font-size': fontsize })
+        }
+
+
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

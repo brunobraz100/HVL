@@ -1,0 +1,65 @@
+@model DocumentModel
+@{
+    ViewData["Title"] = "Novo documento";
+    List<CategoryModel> categories = ViewBag.categoria;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        @Html.Raw(ViewBag.retorno)
+        <div class="card mb-4">
+            <div class="card-title">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                Cadastro de novo documento
+            </div>
+            <div class="card-body">
+                @using(Html.BeginForm("Add", "Documents", FormMethod.Post, new {enctype = "multipart/form-data"}))
+                {
+                    <input asp-for="IdCliente" hidden value="@ViewBag.IdCliente" />
+                    <input asp-for="DsCategoria" hidden />
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="DsDocumento" type="text" placeholder="Nome" />
+                        <label for="DsDocumento">Nome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select asp-for="idCategoria" class="form-control">
+                            <option value="">Selecione</option>
+                            @foreach (CategoryModel category in categories)
+                            {
+                                <option value="@category.IdCategoria">@category.DsCategoria</option>
+                            }
+                        </select>   
+                        <label for="IdCategoria">Categoria</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="vencimento" type="text" placeholder="Validade" />
+                        <label for="vencimento">Validade</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" name="document" id="document" type="file" />
+                        <label for="document">Documento</label>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="@Url.Action("index", "Documents", new {IdCliente = ViewBag.IdCliente})">Voltar</a>
+                        <button class="btn btn-success" type="submit">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#vencimento").mask("99/99/9999");
+            $("#idCategoria").change(function(){
+                console.log("category", $("#idCategoria option:selected").text());
+                $("#DsCategoria").val($("#idCategoria option:selected").text()  )
+            })
+        })
+    </script>
+}

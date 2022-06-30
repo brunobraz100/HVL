@@ -1,0 +1,61 @@
+@model ChangePasswordViewModel
+@{
+    ViewData["Title"] = "Trocar senha";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        @Html.Raw(ViewBag.retorno)
+        <div class="card mb-4">
+            <div class="card-title">
+                <i class="fa-solid fa-lock"></i>
+                Trocar senha
+            </div>
+            <div class="card-body">
+                @using(Html.BeginForm("ChangeFirstPassword", "Account"))
+                {
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="NewPassword" type="password" placeholder="Nova Senha" />
+                        <label for="NewPassword">Nova Senha</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="ComfirmPassword" type="password" placeholder="Confirmar Senha" />
+                        <label for="ComfirmPassword">Confirmar Senha</label>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="@Url.Action("Index", "Account")">Voltar</a>
+                        <button class="btn btn-success" type="submit">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+        $("form").submit(function(e){
+            e.preventDefault();
+            let senha = $("#NewPassword").val()
+            let confirmaSenha = $("#ComfirmPassword").val()
+
+            if(senha != confirmaSenha)
+            {
+                swal("As senhas precisam ser iguais para continuar!", {
+                    icon: "warning",
+                });
+            }
+            else
+            {
+                e.currentTarget.submit();
+            }
+            
+        })
+    </script>
+}
+
+

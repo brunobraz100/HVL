@@ -1,0 +1,131 @@
+@model IEnumerable<CustomerViewModel>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<div class="card mb-4">
+    <br />
+    <div class="card-header">
+        <i class="fas fa-users me-1"></i>
+        Clientes
+        <a  class="btn btn-primary btn-floating" href="@Url.Action("Add", "Customer")">
+            <i class="fa-solid fa-plus"></i>
+            Novo cliente
+        </a>
+    </div>
+    <div class="card-body table-responsive">
+        <table id="dataTable" class="table">
+            <thead>
+                <tr>
+                    <td>CNPJ</td>
+                    <td>Razão Social</td>
+                    <td>E-mail</td>
+                    <td>Ações</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (CustomerViewModel customer in Model)
+                {
+                    <tr>
+                        <td>@customer.NmCnpj</td>
+                        <td>@customer.DsRasaoSocial</td>
+                        <td>@customer.DsEmail</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Customer", new {IdCliente = customer.IdCliente})" class="btn btn-primary" data-toggle="tooltip" title="Editar">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="@Url.Action("index", "Documents", new {IdCliente = customer.IdCliente})" class="btn btn-warning" data-toggle="tooltip" title="Documentos">
+                                <i class="fa-solid fa-file"></i>
+                            </a>
+                            <button onclick="excluir('@customer.IdCliente')" class="btn btn-danger" data-toggle="tooltip" title="Excluir">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#dataTable').DataTable({
+                "language": {
+                    "lengthMenu": "Exibir _MENU_ por página",
+                    "zeroRecords": "Não existem registros",
+                    "info": "página _PAGE_ de _PAGES_",
+                    "paginate": {
+                        "first": "Primeira",
+                        "last": "Última",
+                        "next": "Próxima",
+                        "previous": "Anterior"
+                    },
+                    "search": "Buscar por",
+                    "buttons": {
+                        "pageLength": {
+                            _: "Exibir %d por página",
+                            '-1': "Tout afficher"
+                        }
+                    }
+                },
+                dom: 'Bfrtip',
+            });
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        });
+
+        function excluir(idCliente)
+        {
+  
+            swal({
+                    title: "Você tem certeza?",
+                    text: "Uma vez que remover, você nunca mais vai ver este registro!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/Customer/RemoveCliente?idCliente=" + idCliente,
+                        type: "GET",
+                        contentType: "application/json",
+                        success: function(response)
+                        {
+                            let iconType = "success";
+                            if(response.complete == false)
+                            {
+                                iconType = "warning"
+                            }
+                            swal(response.message, {
+                                icon: iconType,
+                            });
+
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3000)
+                        },
+                        erro: function()
+                        {
+                            swal("Algo deu errado!", {
+                                icon: "warning",
+                            });
+                        }
+                    })
+                   
+                } else {
+                    swal("Tudo bem, nada foi feito!");
+                }
+            });
+        }
+    </script>
+}
